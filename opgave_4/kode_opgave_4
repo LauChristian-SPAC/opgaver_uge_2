@@ -1,0 +1,47 @@
+# Import required packages
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load data
+data = pd.read_csv("DKHousingPricesSample100k.csv")
+#print(data.head(10))
+
+# Group data by region and average across purchase price
+data_region_purchase_mean = data.groupby('region')['purchase_price'].mean()
+#print(data_region_purchase_mean)
+
+# Group data by house type and region and average across purchase price
+data_housetype_region_purchase_mean = data.groupby(['house_type','region'], as_index=False)['purchase_price'].mean()
+#print(data_housetype_region_purchase_mean)
+
+#
+data_housetype_region_bornholm_purchase_mean = data[data['region'] == 'Bornholm'] \
+    .groupby(['house_type'], as_index=False)['purchase_price'].mean()
+data_housetype_region_zealand_purchase_mean = data[data['region'] == 'Zealand'] \
+    .groupby(['house_type'], as_index=False)['purchase_price'].mean()
+data_housetype_region_jutland_purchase_mean = data[data['region'] == 'Jutland'] \
+    .groupby(['house_type'], as_index=False)['purchase_price'].mean()
+data_housetype_region_fyn_purchase_mean = data[data['region'] == 'Fyn & islands'] \
+    .groupby(['house_type'], as_index=False)['purchase_price'].mean()
+
+
+barWidth = 0.25
+
+r1 = np.arange(len(data_housetype_region_bornholm_purchase_mean))
+r2 = [x + barWidth for x in r1]
+r3 = [x + barWidth for x in r2]
+r4 = [x + barWidth for x in r3]
+
+plt.bar(r1, data_housetype_region_bornholm_purchase_mean['purchase_price'],width=barWidth, edgecolor='white', label='Bornholm')
+plt.bar(r2, data_housetype_region_zealand_purchase_mean['purchase_price'],width=barWidth, edgecolor='white', label='Zealand')
+plt.bar(r3, data_housetype_region_jutland_purchase_mean['purchase_price'],width=barWidth, edgecolor='white', label='Jutland')
+plt.bar(r4, data_housetype_region_fyn_purchase_mean['purchase_price'],width=barWidth, edgecolor='white', label='Fyn & islands')
+plt.xlabel('house_type')
+plt.ylabel('purchase_price')
+plt.title('Average purchase prices for house types across regions')
+plt.xticks([r + barWidth * 1.5 for r in range(len(data_housetype_region_bornholm_purchase_mean))],
+           data_housetype_region_bornholm_purchase_mean['house_type'])
+plt.legend()
+plt.show()
