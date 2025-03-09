@@ -1,0 +1,40 @@
+# Import required packages
+
+from collections import defaultdict
+import matplotlib.pyplot as plt
+import pandas as pd
+from wordcloud import WordCloud
+
+# Read data file
+data = list(pd.read_csv("Navne_liste.txt"))
+
+# Sort data alphabetically
+sorted_data_alphabetically = sorted(data)
+
+
+# Key function for sorting lengthwise
+def længde_sortering(a):
+    return len(a)
+
+# Sort data lengthwise
+sorted_data = sorted(sorted_data_alphabetically, key=længde_sortering)
+
+# Count letters and turn into dictionary
+d = defaultdict(int)
+
+for k in sorted_data:
+    for x in k:
+        d[x] += 1
+
+name_letter_list = sorted(d.items())
+name_letter_dict = dict(name_letter_list)
+
+# Plot letter counter as histogram
+plt.bar(name_letter_dict.keys(), name_letter_dict.values())
+plt.show()
+
+# Plot letter counter as word cloud
+
+# wc = WordCloud().generate(name_letter_dict)
+# plt.imshow(wc)
+
